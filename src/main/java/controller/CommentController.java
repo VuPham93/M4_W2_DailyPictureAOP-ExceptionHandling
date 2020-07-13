@@ -40,7 +40,6 @@ public class CommentController {
 
     @PostMapping("/comment-save")
     public String save(Comment comment) throws BadWordsException {
-        comment.setDate(timeConvert());
         commentService.save(comment);
         return "redirect:/comments";
     }
@@ -50,9 +49,4 @@ public class CommentController {
         return new ModelAndView("/badWordNotAcceptable");
     }
 
-    private String timeConvert() {
-        LocalDateTime myDateObj = LocalDateTime.now();
-        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        return myDateObj.format(myFormatObj);
-    }
 }

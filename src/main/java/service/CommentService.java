@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import repository.ICommentRepository;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,9 +31,16 @@ public class CommentService implements ICommentService{
     public void save(Comment comment) throws BadWordsException {
         for (String word: badWords) {
             if (comment.getDetail().contains(word)) {
-                throw new BadWordsException();
+                throw new BadWordsException("Commenter: " + comment.getCommenter() + " | Detail: " + comment.getDetail() + " | Time: " + timeConvert("dd-MM-yyyy HH:mm:ss"));
             }
         }
+        comment.setDate(timeConvert("yyyy-MM-dd"));
         commentRepository.save(comment);
+    }
+
+    private String timeConvert(String dateFormat) {
+        LocalDateTime myDateObj = LocalDateTime.now();
+        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern(dateFormat);
+        return myDateObj.format(myFormatObj);
     }
 }
